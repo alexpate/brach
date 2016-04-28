@@ -2,6 +2,23 @@
   <script src="//js.pusher.com/3.0/pusher.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
   <script>
+    $('#form-start-game').submit(function(e) {
+      e.preventDefault();
+      var playerName = $('#player-name').val();
+      $.ajax({
+        url: '/game/new',
+        method: 'post',
+        data: {playerName: playerName},
+        success: function(res) {
+          $('.link-to-game').html('Play this game <a href="/game/' + res.gameId + '">' + res.gameId + '</a>');
+        },
+        error: function(res) {
+          console.log(res);
+        }
+      })
+    });
+  </script>
+  <script>
     var pusher = new Pusher("8dfaafabafb15e7bb4db", {
       cluster: 'eu',
       encrypted: true,
@@ -15,6 +32,9 @@
       $('.game__button').click(function() {
         var selected = $(this).attr('data-move'),
             type;
+
+        $('.game__button.current').removeClass('current');
+        $(this).addClass('current');
 
         switch(selected) {
           case 'paper':

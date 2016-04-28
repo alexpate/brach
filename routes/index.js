@@ -13,6 +13,24 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.post('/game/new', function(req, res, next) {
+  res.send({gameId: _generateSessionKey(8)});
+});
+
+function _generateSessionKey(size) {
+ var text = "";
+ var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+ for (var i=0; i < size; i++)
+     text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+ return text;
+}
+
+router.get('/game/:id', function(req, res, next) {
+  res.render('game', {title: 'The Game'});
+});
+
 router.post('/pusher_auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;

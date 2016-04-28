@@ -1,10 +1,10 @@
 {{> header}}
   <div class="app">
-    {{> leaderboard}}
-    <main class="game">
-      <button data-move="paper" class="game__button">Paper</button>
-      <button data-move="scissors" class="game__button">Scissors</button>
-      <button data-move="rock" class="game__button">Rock</button>
-    </main>
+    <form id="form-start-game">
+      <label>Your Name</label>
+      <input type="text" id="player-name">
+      <button id="start-game">Start Game</button>
+    </form>
+    <div class="link-to-game"></div>
   </div>
 {{> footer}}

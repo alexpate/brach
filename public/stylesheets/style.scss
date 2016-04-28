@@ -1,6 +1,6 @@
-$font-family-primary: 'Luckiest Guy', sans-serif;
+$font-family-primary: 'GT Pressura Mono Trial', sans-serif;
 $color-green: #2cdecd;
-$color-blue: #22243b;
+$color-blue: #262832;
 
 %font-family-primary {
   font-family: $font-family-primary;
@@ -25,6 +25,7 @@ a {
   left: 0;
   background-color: $color-green;
   padding: 40px 10px;
+  display: none;
 }
 
 .leaderboard h1 {
@@ -34,7 +35,115 @@ a {
 }
 
 .game {
-  width: calc(100% - 300px);
+  width: 100%;
   background: $color-blue;
-  padding: 50px;
+  padding: 50px 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game__button {
+  width: 200px;
+  height: 200px;
+  display: block;
+  border-radius: 50%;
+  border: 0;
+  float: left;
+  cursor: pointer;
+  border: 6px solid $color-blue;
+  box-shadow: none;
+  transition: box-shadow 100ms ease-in-out;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &--rock {
+    background-color: #9B5CB5;
+
+    &.current,
+    &:hover {
+      box-shadow: 0 0 0 12px #9B5CB5;
+    }
+  }
+
+  &--paper {
+    background-color: #FF4A51;
+
+    &.current,
+    &:hover {
+      box-shadow: 0 0 0 12px #FF4A51;
+    }
+  }
+
+  &--scissors {
+    background-color: #F7C50C;
+
+    &.current,
+    &:hover {
+      box-shadow: 0 0 0 12px #F7C50C;
+    }
+
+  }
+}
+
+.timer {
+  @extend %font-family-primary;
+  font-size: 40px;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  line-height: 1em;
+  position: absolute;
+  width: 200px;
+  right: 20px;
+  bottom: 20px;
+  text-align: center;
+  
+  &:before,
+  &:after {
+    font-size: 40px;
+    line-height: 1em;
+    font-weight: bold;
+    background: $color-blue;
+    clip: rect(0, 900px, 0, 0);
+    color: #fff;
+    content: attr(data-timer);
+    white-space: pre;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    text-align: center;
+  }
+  
+  &:before {
+    animation: glitch-1 5s infinite linear alternate-reverse;
+    right: 44px;
+    text-shadow: 1px 0 #40bad8;
+  }
+  
+  &:after {
+    animation: glitch-2 3s infinite linear alternate-reverse;
+    right: 46px;
+    text-shadow: -1px 0 #f00;
+  }
+}
+
+@keyframes glitch-1{
+    @for $i from 0 through 16 {
+        #{percentage($i*(1/16))}{
+            clip: rect(random(100)+px, 9999px, random(300)+px, 0);
+        }
+    }
+}
+
+@keyframes glitch-2{
+    @for $i from 0 through 16 {
+        #{percentage($i*(1/16))}{
+            clip: rect(random(100)+px, 9999px, random(300)+px,0);
+        }
+    }
 }
