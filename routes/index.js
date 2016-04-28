@@ -50,6 +50,47 @@ router.post('/pusher_auth', function(req, res) {
   res.send(auth);
 });
 
+router.post('/game/:id/results', function(req, res) {
+  var results = req.body.results;
+  var wins = [];
+  var returnresult = [];
+
+  for (var i=0; i < results.length; i++)
+  {
+    wins[i] = 0;
+  }
+
+  for (var i=0; i < results.length; i++)
+  {
+    for (var j = (i + 1); j < results.length; j++)
+    {
+      choice1 = parseInt(results[i].choice);
+      choice2 = parseInt(results[j].choice);
+      victor = who_wins(choice1, choice2);
+
+      switch (victor) {
+        case 0:
+          //draw
+          break;
+        case 1:
+          wins[i]++;
+          break;
+        case 2:
+          wins[j]++
+          break;
+        default:
+          console.log("ERROR: unknown result");
+      }
+    }
+
+    //build the output
+    var obj = {user_id: results[i].user_id, wins: wins[i]}
+    returnresult.push(obj);
+  }
+
+  res.status(200).send(returnresult);
+});
+
 function generateSessionKey(size) {
    var text = "";
    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -59,5 +100,56 @@ function generateSessionKey(size) {
 
    return text;
 }
+
+function who_wins(choice1, choice2) {
+  var victor = 0;
+
+  //1=rock, 2=paper, 3=scissors, 0 = nothing
+
+  if (choice2 == 0)
+  {
+    if (choice1 != 0)
+    {
+      victor = 1;
+    }
+  }
+  else {
+    switch (choice1) {
+      case 0:
+          victor = 2;
+          break;
+      case 1:
+        if (choice2 == 2) {
+          victor = 2;
+        }
+        else if (choice2 == 3) {
+          victor = 1
+        }
+        break;
+      case 2:
+        if (choice2 == 1) {
+          victor = 1;
+        }
+        else if (choice2 == 3) {
+          victor = 2;
+        }
+        break;
+      case 3:
+        if (choice2 == 1) {
+          victor = 2;
+        }
+        else if (choice2 == 2) {
+          victor = 1;
+        }
+        break;
+      default:
+        console.log("ERROR: unknown choice");
+        victor = 0;
+    }
+  }
+
+  return victor;
+}
+
 
 module.exports = router;
