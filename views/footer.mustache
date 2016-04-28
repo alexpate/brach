@@ -44,28 +44,28 @@
 
         switch(selected) {
           case 'paper':
-            console.log('is paper');
+            type = 1;
             break;
           case 'scissors':
-            console.log('is scissors');
+            type = 2;
             break;
           case 'rock':
-            console.log('is rock');
+            type = 3;
             break;
         }
 
         channel.trigger('client-someeventname', {
-          type: selected,
-          player_id: 012345
+          type: type,
+          player_id: channel.members.me.id
         });
 
       });
 
     });
 
-    channel.bind('pusher:member_added', function(data) {
-      console.log(data);
-    })
+    // channel.bind('pusher:member_added', function(data) {
+    //   console.log(data);
+    // })
 
     var initial = 100;
     var count = initial;
@@ -83,6 +83,7 @@
     function displayCount(count) {
       var res = count / 100;
       document.getElementById("js-timer").innerHTML = res.toPrecision(count.toString().length);
+      // document.getElementById("js-timer").attr('dat')
     }
 
       counter = setInterval(timer, 100);
@@ -97,9 +98,35 @@
         displayCount(count);
     });
 
+    var playerStates = {
+      1: [],
+      2: [],
+      3: []
+    };
+
     channel.bind('client-someeventname', function(data) {
       console.log(data);
+      addOtherPlayerSelections(data.type, data.player_id);
+
     });
+
+    var addOtherPlayerSelections = function(typeId, playerId) {
+      for(var state in playerStates) {
+        console.log("Pstate" + playerStates[state]);
+        console.log("State: " + state);
+        for(var i = 0, l = playerStates[state].length; i < l; i++) {
+          console.log("HERE");
+          console.log("index "+ i +" state " + playerStates[state][i], playerId);
+          if (playerStates[state][i] === playerId) {
+            playerStates[state].splice(i, 1);
+            $('.game__button[data-element=' + state + '] .players ul').empty().html(JSON.stringify(playerStates[state]));
+          }
+        }
+      }
+      playerStates[typeId].push(playerId);
+      console.log(playerStates);
+      $('.game__button[data-element=' + typeId + '] .players ul').empty().html(JSON.stringify(playerStates[typeId]));
+    }
 
 
   </script>
