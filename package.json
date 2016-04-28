@@ -1,33 +1,17 @@
 {
-  "name": "jaws",
-  "version": "1.0.0",
-  "description": "An on boarding gamification thing",
-  "main": "index.js",
+  "name": "brach",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pusher/jaws.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pusher/jaws/issues"
-  },
-  "homepage": "https://github.com/pusher/jaws#readme",
-  "devDependencies": {},
   "dependencies": {
-    "body-parser": "^1.14.2",
-    "dotenv": "^2.0.0",
-    "express": "^4.13.4",
-    "mustache": "^2.2.1",
-    "mustache-express": "^1.2.2",
-    "neo4j": "2.0.0-RC2",
-    "node-fetch": "^1.3.3",
-    "node-sass-middleware": "^0.9.7",
-    "pusher": "^1.1.0",
-    "yamljs": "^0.2.4"
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "jade": "~1.11.0",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0"
   }
 }
