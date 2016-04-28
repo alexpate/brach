@@ -1,18 +1,22 @@
 var express = require('express');
+var app = express();
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mustacheExpress = require('mustache-express');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var app = express();
+app.engine('mustache', mustacheExpress());
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'mustache');
+app.set('view cache', false);
+app.set('views', __dirname + '/views');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -56,5 +60,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+var port = process.env.PORT || 3000
+app.listen(port, function () {
+  console.log('Listening on port %d', port)
+});
 
 module.exports = app;
