@@ -35,9 +35,18 @@ router.get('/game/:id', function(req, res, next) {
 });
 
 router.post('/pusher_auth', function(req, res) {
+  var names = ['bob', 'john'];
+
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  var auth = pusher.authenticate(socketId, channel);
+  var presenceData = {
+    user_id: generateSessionKey(4),
+    user_info: {
+      name: generateSessionKey(6)
+    }
+  };
+  var auth = pusher.authenticate(socketId, channel, presenceData);
+
   res.send(auth);
 });
 

@@ -31,7 +31,7 @@
       authEndpoint: '/pusher_auth'
     });
 
-    var channel = pusher.subscribe('private-game-{{ gameId }}');
+    var channel = pusher.subscribe('presence-game-{{ gameId }}');
 
     channel.bind('pusher:subscription_succeeded', function(data) {
 
@@ -61,6 +61,40 @@
 
       });
 
+    });
+
+    channel.bind('pusher:member_added', function(data) {
+      console.log(data);
+    })
+
+    var initial = 100;
+    var count = initial;
+    var counter; //10 will run it every 100th of a second
+
+    function timer() {
+      if (count <= 0) {
+          clearInterval(counter);
+          return;
+      }
+      count--;
+      displayCount(count);
+    }
+
+    function displayCount(count) {
+      var res = count / 100;
+      document.getElementById("js-timer").innerHTML = res.toPrecision(count.toString().length);
+    }
+
+      counter = setInterval(timer, 100);
+
+    $('#stop').on('click', function () {
+      clearInterval(counter);
+    });
+
+    $('#reset').on('click', function () {
+        clearInterval(counter);
+        count = initial;
+        displayCount(count);
     });
 
     channel.bind('client-someeventname', function(data) {
