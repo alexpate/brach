@@ -1,3 +1,4 @@
+  </div><!-- End .app -->
   <!-- Scripts -->
   <script src="//js.pusher.com/3.0/pusher.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -5,18 +6,23 @@
     $('#form-start-game').submit(function(e) {
       e.preventDefault();
       var playerName = $('#player-name').val();
+      invokeNewGame(playerName);
+    });
+
+    var invokeNewGame = function(playerName) {
       $.ajax({
         url: '/game/new',
         method: 'post',
         data: {playerName: playerName},
         success: function(res) {
-          $('.link-to-game').html('Play this game <a href="/game/' + res.gameId + '">' + res.gameId + '</a>');
+          $('#form-start-game').hide();
+          $('.card-game__link').html('Play this game <a href="/game/' + res.gameId + '">' + res.gameId + '</a>');
         },
         error: function(res) {
           console.log(res);
         }
-      })
-    });
+      });
+    }
   </script>
   <script>
     var pusher = new Pusher("8dfaafabafb15e7bb4db", {
@@ -25,7 +31,7 @@
       authEndpoint: '/pusher_auth'
     });
 
-    var channel = pusher.subscribe('private-test-channel');
+    var channel = pusher.subscribe('private-game-{{ gameId }}');
 
     channel.bind('pusher:subscription_succeeded', function(data) {
 

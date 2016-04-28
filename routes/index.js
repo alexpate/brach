@@ -27,7 +27,11 @@ router.get('/game/:id', function(req, res, next) {
   var gameId = req.param('id');
 
   var state = STORE.get(gameId);
-  res.render('game', { title: 'The Game', state: state });
+  res.render('game', {
+    title: 'The Game',
+    gameId: req.params.id,
+    state: state
+  });
 });
 
 router.post('/pusher_auth', function(req, res) {

@@ -2,11 +2,14 @@ $font-family-primary: 'GT Pressura Mono Trial', sans-serif;
 $color-green: #2cdecd;
 $color-blue: #262832;
 
+$color-primary: $color-green;
+
 %font-family-primary {
   font-family: $font-family-primary;
 }
 
 @import 'partials/base';
+@import 'partials/card';
 
 a {
   color: #00b7ff;
