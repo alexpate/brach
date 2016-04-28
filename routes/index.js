@@ -14,21 +14,20 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/game/new', function(req, res, next) {
-  res.send({gameId: _generateSessionKey(8)});
+  var gameId = generateSessionKey(8);
+  STORE.set(gameId, {
+    players: 1,
+    running: false
+  });
+
+  res.send({ gameId: gameId });
 });
 
-function _generateSessionKey(size) {
- var text = "";
- var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
- for (var i=0; i < size; i++)
-     text += possible.charAt(Math.floor(Math.random() * possible.length));
-
- return text;
-}
-
 router.get('/game/:id', function(req, res, next) {
-  res.render('game', {title: 'The Game'});
+  var gameId = req.param('id');
+
+  var state = STORE.get(gameId);
+  res.render('game', { title: 'The Game', state: state });
 });
 
 router.post('/pusher_auth', function(req, res) {
@@ -37,5 +36,15 @@ router.post('/pusher_auth', function(req, res) {
   var auth = pusher.authenticate(socketId, channel);
   res.send(auth);
 });
+
+function generateSessionKey(size) {
+   var text = "";
+   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+   for (var i=0; i < size; i++)
+       text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+   return text;
+}
 
 module.exports = router;

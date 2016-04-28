@@ -11,6 +11,9 @@ var mustacheExpress = require('mustache-express');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var Store = require('./lib/store');
+
+STORE = new Store();
 
 app.engine('mustache', mustacheExpress());
 
