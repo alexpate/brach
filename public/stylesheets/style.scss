@@ -1,0 +1,40 @@
+$font-family-primary: 'Luckiest Guy', sans-serif;
+$color-green: #2cdecd;
+$color-blue: #22243b;
+
+%font-family-primary {
+  font-family: $font-family-primary;
+}
+
+@import 'partials/base';
+
+a {
+  color: #00b7ff;
+}
+
+.leaderboard,
+.game {
+  float: left;
+  top: 0;
+  position: relative;
+  height: 100vh;
+}
+
+.leaderboard {
+  width: 300px;
+  left: 0;
+  background-color: $color-green;
+  padding: 40px 10px;
+}
+
+.leaderboard h1 {
+  @extend %font-family-primary;
+  color: $color-blue;
+  text-align: center;
+}
+
+.game {
+  width: calc(100% - 300px);
+  background: $color-blue;
+  padding: 50px;
+}

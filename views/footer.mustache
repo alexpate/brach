@@ -1,0 +1,48 @@
+  <!-- Scripts -->
+  <script src="//js.pusher.com/3.0/pusher.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script>
+    var pusher = new Pusher("8dfaafabafb15e7bb4db", {
+      cluster: 'eu',
+      encrypted: true,
+      authEndpoint: '/pusher_auth'
+    });
+
+    var channel = pusher.subscribe('private-test-channel');
+
+    channel.bind('pusher:subscription_succeeded', function(data) {
+
+      $('.game__button').click(function() {
+        var selected = $(this).attr('data-move'),
+            type;
+
+        switch(selected) {
+          case 'paper':
+            console.log('is paper');
+            break;
+          case 'scissors':
+            console.log('is scissors');
+            break;
+          case 'rock':
+            console.log('is rock');
+            break;
+        }
+
+        channel.trigger('client-someeventname', {
+          type: selected,
+          player_id: 012345
+        });
+
+      });
+
+    });
+
+    channel.bind('client-someeventname', function(data) {
+      console.log(data);
+    });
+
+
+  </script>
+
+</body>
+</html>

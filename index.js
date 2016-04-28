@@ -4,6 +4,7 @@ var app = express();
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var sassMiddleware = require('node-sass-middleware');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
@@ -17,6 +18,7 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('view cache', false);
 app.set('views', __dirname + '/views');
+app.set('css_src', __dirname + '/public');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -24,6 +26,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(sassMiddleware({
+  src: app.get('css_src'),
+  outputStyle: 'compressed',
+  response: true
+}));
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
