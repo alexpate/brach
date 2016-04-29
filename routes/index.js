@@ -51,20 +51,17 @@ router.post('/pusher_auth', function(req, res) {
 router.post('/game/:id/results', function(req, res) {
   var results = req.body.results;
   var wins = [];
-  var returnresult = [];
+  var returnResult = [];
 
-  for (var i=0; i < results.length; i++)
-  {
+  for (var i = 0; i < results.length; i++) {
     wins[i] = 0;
   }
 
-  for (var i=0; i < results.length; i++)
-  {
-    for (var j = (i + 1); j < results.length; j++)
-    {
+  for (var i = 0; i < results.length; i++) {
+    for (var j = (i + 1); j < results.length; j++) {
       choice1 = parseInt(results[i].choice);
       choice2 = parseInt(results[j].choice);
-      victor = who_wins(choice1, choice2);
+      victor = whoWins(choice1, choice2);
 
       switch (victor) {
         case 0:
@@ -82,11 +79,11 @@ router.post('/game/:id/results', function(req, res) {
     }
 
     //build the output
-    var obj = {user_id: results[i].user_id, wins: wins[i]}
-    returnresult.push(obj);
+    var obj = { user_id: results[i].user_id, wins: wins[i] }
+    returnResult.push(obj);
   }
 
-  res.status(200).send(returnresult);
+  res.status(200).send(returnResult);
 });
 
 function generateSessionKey(size) {
@@ -99,15 +96,13 @@ function generateSessionKey(size) {
    return text;
 }
 
-function who_wins(choice1, choice2) {
+function whoWins(choice1, choice2) {
   var victor = 0;
 
-  //1=rock, 2=paper, 3=scissors, 0 = nothing
+  //1=paper, 2=scissors, 3=rock, 0 = nothing
 
-  if (choice2 == 0)
-  {
-    if (choice1 != 0)
-    {
+  if (choice2 == 0) {
+    if (choice1 != 0) {
       victor = 1;
     }
   }
@@ -135,8 +130,7 @@ function who_wins(choice1, choice2) {
       case 3:
         if (choice2 == 1) {
           victor = 2;
-        }
-        else if (choice2 == 2) {
+        } else if (choice2 == 2) {
           victor = 1;
         }
         break;

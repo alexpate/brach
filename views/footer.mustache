@@ -34,6 +34,7 @@
     var channel = pusher.subscribe('presence-game-{{ gameId }}');
 
     channel.bind('pusher:subscription_succeeded', function(data) {
+      leaderboardAddPlayer(channel.members.me.info.name);
       if (channel.members.count == 1) {
         $('.game__button').attr('disabled', true);
         $('#waiting-notice').html("Waiting for more players...");
@@ -76,7 +77,7 @@
 
     var initial = 100;
     var count = initial;
-    var counter; //10 will run it every 100th of a second
+    var counter;
 
     function timer() {
       if (count <= 0) {
@@ -89,21 +90,24 @@
 
     function displayCount(count) {
       var res = count / 100;
-      document.getElementById("js-timer").innerHTML = res.toPrecision(count.toString().length);
-      // document.getElementById("js-timer").attr('dat')
+      var newTime = res.toPrecision(count.toString().length);
+
+      $('#js-timer').html(newTime);
+      $('#js-timer').attr('data-timer',newTime);
     }
 
-      counter = setInterval(timer, 100);
+    counter = setInterval(timer, 100);
 
     $('#stop').on('click', function () {
       clearInterval(counter);
     });
 
     $('#reset').on('click', function () {
-        clearInterval(counter);
-        count = initial;
-        displayCount(count);
+      clearInterval(counter);
+      count = initial;
+      displayCount(count);
     });
+
 
     var playerStates = {
       1: [],
@@ -127,6 +131,23 @@
       playerStates[typeId].push(playerId);
       $('.game__button[data-element=' + typeId + '] .players ul').empty().html(playerStates[typeId].join(" ,"));
     }
+
+    channel.bind('pusher:member_added', function(member) {
+      leaderboardAddPlayer(member.info.name);
+    });
+
+    channel.bind('pusher:member_removed', function(member) {
+      leaderboardRemovePlayer(member.info.name);
+    });
+
+    var leaderboardAddPlayer = function(memberName) {
+      $('.leaderboard__list').append('<li data-player-name="' + memberName + '">' + memberName + '</li>');
+    }
+
+    var leaderboardRemovePlayer = function(memberName) {
+      $('.leaderboard__list li[data-player-name="' + memberName + '"]').remove();
+    }
+
 
 
   </script>
