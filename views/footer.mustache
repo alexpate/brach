@@ -75,42 +75,40 @@
       if (channel.members.count > 1) {
         $('#waiting-notice').hide();
         $('.game__button').attr('disabled', false);
+
+        if (channel.members.me.info.leader) {
+          // start timer here
+          channel.trigger('client-game-{{ gameId }}-game_start_ready', {})
+        }
       }
     })
 
-    var initial = 100;
-    var count = initial;
-    var counter;
-
-    function timer() {
-      if (count <= 0) {
-          clearInterval(counter);
-          return;
+    channel.bind('client-game-{{ gameId }}-game_start_ready', function(data) {
+      if (!channel.members.me.info.leader) {
+        channel.trigger('client-game-{{ gameId }}-game_start_ready_response', {})
       }
-      count--;
-      displayCount(count);
-    }
+    })
 
-    function displayCount(count) {
-      var res = count / 100;
-      var newTime = res.toPrecision(count.toString().length);
+    var responseCount = 0;
+    channel.bind('client-game-{{ gameId }}-game_start_ready_response', function(data) {
+      var expectedResponses = channel.members.count - 1 // for leader;
 
-      $('#js-timer').html(newTime);
-      $('#js-timer').attr('data-timer',newTime);
-    }
-
-    counter = setInterval(timer, 100);
-
-    $('#stop').on('click', function () {
-      clearInterval(counter);
+      if (channel.members.me.info.leader) {
+        responseCount++;
+        console.log("Resp count " + responseCount);
+        if(responseCount == expectedResponses) {
+          channel.trigger('client-game-{{ gameId }}-game_start', {})
+          startTimer(10, $('#js-timer'));
+          responseCount = 0;
+        }
+      }
     });
 
-    $('#reset').on('click', function () {
-      clearInterval(counter);
-      count = initial;
-      displayCount(count);
+    channel.bind('client-game-{{ gameId }}-game_start', function(data) {
+      if (!channel.members.me.info.leader) {
+        startTimer(10, $('#js-timer'));
+      }
     });
-
 
     var playerStates = {
       1: [],
@@ -166,6 +164,19 @@
       $('.leaderboard__list li[data-player-name="' + memberName + '"]').remove();
     }
 
+    function startTimer(duration, display) {
+      var timer = duration, seconds;
+      setInterval(function() {
+        seconds = parseInt(timer % 60, 10);
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.text(seconds);
+
+        if (--timer < 0) {
+          timer = 0;
+        }
+      }, 1000);
+    }
 
   </script>
 
