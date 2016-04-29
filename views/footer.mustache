@@ -120,12 +120,12 @@
         for(var i = 0, l = playerStates[state].length; i < l; i++) {
           if (playerStates[state][i] === playerId) {
             playerStates[state].splice(i, 1);
-            $('.game__button[data-element=' + state + '] .players ul').empty().html(JSON.stringify(playerStates[state]));
+            $('.game__button[data-element=' + state + '] .players ul').empty().html(playerStates[state].join(" ,"));
           }
         }
       }
       playerStates[typeId].push(playerId);
-      $('.game__button[data-element=' + typeId + '] .players ul').empty().html(JSON.stringify(playerStates[typeId]));
+      $('.game__button[data-element=' + typeId + '] .players ul').empty().html(playerStates[typeId].join(" ,"));
     }
 
 
