@@ -1,6 +1,7 @@
 $font-family-primary: 'GT Pressura Mono Trial', sans-serif;
 $color-green: #2cdecd;
 $color-blue: #262832;
+$color-black: #1C2931;
 
 $color-primary: $color-green;
 
@@ -10,6 +11,7 @@ $color-primary: $color-green;
 
 @import 'partials/base';
 @import 'partials/card';
+
 
 a {
   color: #00b7ff;
@@ -21,33 +23,67 @@ a {
 
 .leaderboard,
 .game {
-  float: left;
-  top: 0;
   position: relative;
+  top: 0;
+  float: left;
   height: 100vh;
+
+
 }
 
 .leaderboard {
   width: 300px;
-  left: 0;
-  background-color: $color-green;
-  padding: 40px 10px;
+  background-color: $color-black;
+  border-right: 1px solid lighten($color-black, 10%);
+  padding: 40px 0;
   display: none;
-}
 
-.leaderboard h1 {
-  @extend %font-family-primary;
-  color: $color-blue;
-  text-align: center;
+  @media screen and (min-width: 50em) {
+    display: block;
+  }
+
+  h1 {
+    @extend %font-family-primary;
+    color: #fff;
+    margin-left: 20px;
+  }
+
+  &__list {
+    width: 100%;
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      width: 100%;
+      height: 60px;
+      border-bottom: 1px solid lighten($color-black, 10%);
+      padding: 20px;
+      color: #fff;
+      font-size: 15px;
+      background: lighten($color-black, 2%);
+
+      &:first-of-type {
+        border-top: 1px solid lighten($color-black, 10%);
+      }
+    }
+  }
 }
 
 .game {
   width: 100%;
-  background: $color-blue;
   padding: 50px 200px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: space-between;
+
+  @media screen and (min-width: 50em) {
+    width: calc(100% - 300px);
+    display: flex;
+    flex-direction: row;
+  }
 }
 
 .game__button {
@@ -107,36 +143,37 @@ a {
   position: absolute;
   width: 200px;
   right: 20px;
-  bottom: 20px;
-  text-align: center;
+  top: 50px;
+  text-align: left;
 
-  &:before,
-  &:after {
-    font-size: 40px;
-    line-height: 1em;
-    font-weight: bold;
-    background: $color-blue;
-    clip: rect(0, 900px, 0, 0);
-    color: #fff;
-    content: attr(data-timer);
-    white-space: pre;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    text-align: center;
-  }
+  // &:before,
+  // &:after {
+  //   font-size: 40px;
+  //   line-height: 1em;
+  //   font-weight: bold;
+  //   background: $color-blue;
+  //   clip: rect(0, 900px, 0, 0);
+  //   color: #fff;
+  //   content: attr(data-timer);
+  //   white-space: pre;
+  //   overflow: hidden;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   text-align: left;
+  // }
 
-  &:before {
-    animation: glitch-1 5s infinite linear alternate-reverse;
-    right: 44px;
-    text-shadow: 1px 0 #40bad8;
-  }
+  // &:before {
+  //   animation: glitch-1 5s infinite linear alternate-reverse;
+  //   text-shadow: 1px 0 #40bad8;
+  //   left: 2px;
+  // }
 
-  &:after {
-    animation: glitch-2 3s infinite linear alternate-reverse;
-    right: 46px;
-    text-shadow: -1px 0 #f00;
-  }
+  // &:after {
+  //   animation: glitch-2 3s infinite linear alternate-reverse;
+  //   text-shadow: -1px 0 #f00;
+  //   left: -2px;
+  // }
 }
 
 @keyframes glitch-1{

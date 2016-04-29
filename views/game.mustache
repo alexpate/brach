@@ -1,21 +1,21 @@
 {{> header}}
-  <div class="app">
-    {{> leaderboard}}
-    <main class="game">
-      <div id="waiting-notice"></div>
-      <button data-move="paper" data-element="1" class="game__button game__button--paper">
-        Paper
-        <div class="players"><ul></ul></div>
-      </button>
-      <button data-move="scissors" data-element="2" class="game__button game__button--scissors">
-        Scissors
-        <div class="players"><ul></ul></div>
-      </button>
-      <button data-move="rock" data-element="3" class="game__button game__button--rock">
-        Rock
-        <div class="players"><ul></ul></div>
-      </button>
-    </main>
-    <span class="timer" id="js-timer" data-timer="15:09">15:09</span>
+  {{> leaderboard}}
+  <span class="timer" id="js-timer" data-timer="15:09">15:09</span>
+  <main class="game">
+    <div id="waiting-notice"></div>
+    <button data-move="paper" data-element="1" class="game__button game__button--paper">
+      Paper
+      <div class="players"><ul></ul></div>
+    </button>
+    <button data-move="scissors" data-element="2" class="game__button game__button--scissors">
+      Scissors
+      <div class="players"><ul></ul></div>
+    </button>
+    <button data-move="rock" data-element="3" class="game__button game__button--rock">
+      Rock
+      <div class="players"><ul></ul></div>
+    </button>
+  </main>
+  <div class="leaderboard">
   </div>
 {{> footer}}
