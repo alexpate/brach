@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/game/new', function(req, res, next) {
-  var gameId = generateSessionKey(16);
+  var gameId = req.body.gameName + "-" + Math.floor((Math.random() * 99));
   STORE.set(gameId, {
     players: 1,
     running: false

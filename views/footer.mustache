@@ -5,15 +5,15 @@
   <script>
     $('#form-start-game').submit(function(e) {
       e.preventDefault();
-      var playerName = $('#player-name').val();
-      invokeNewGame(playerName);
+      var gameName = $('#game-name').val();
+      invokeNewGame(gameName);
     });
 
-    var invokeNewGame = function(playerName) {
+    var invokeNewGame = function(gameName) {
       $.ajax({
         url: '/game/new',
         method: 'post',
-        data: {playerName: playerName},
+        data: {gameName: gameName},
         success: function(res) {
           $('#form-start-game').hide();
           $('.card-game__link').html('Play this game <a href="/game/' + res.gameId + '">' + res.gameId + '</a>');
