@@ -1,4 +1,4 @@
-$font-family-primary: 'GT Pressura Mono Trial', sans-serif;
+$font-family-primary: 'GT Pressura Mono Web', sans-serif;
 $color-green: #2cdecd;
 $color-blue: #262832;
 $color-black: #1C2931;
@@ -33,8 +33,8 @@ a {
 
 .leaderboard {
   width: 300px;
-  background-color: $color-black;
-  border-right: 1px solid lighten($color-black, 10%);
+  background-color: darken($color-black, 5%);
+  border-right: 1px solid lighten($color-black, 5%);
   padding: 40px 0;
   display: none;
 
@@ -56,16 +56,24 @@ a {
     padding: 0;
 
     li {
+      @extend %font-family-primary;
       width: 100%;
       height: 60px;
-      border-bottom: 1px solid lighten($color-black, 10%);
+      border-bottom: 1px solid lighten($color-black, 2%);
       padding: 20px;
       color: #fff;
       font-size: 15px;
-      background: lighten($color-black, 2%);
+      background: darken($color-black, 4%);
 
       &:first-of-type {
-        border-top: 1px solid lighten($color-black, 10%);
+        border-top: 1px solid lighten($color-black, 2%);
+      }
+
+      span {
+        text-align: right;
+        float: right;
+        font-size: 18px;
+        font-weight: bold;
       }
     }
   }
@@ -97,6 +105,14 @@ a {
   border: 6px solid $color-blue;
   box-shadow: none;
   transition: box-shadow 100ms ease-in-out;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100%;
+
+  @media screen and (min-width: 50em) {
+    width: 300px;
+    height: 300px;
+  }
 
   &:focus {
     outline: 0;
@@ -104,6 +120,7 @@ a {
 
   &--rock {
     background-color: #9B5CB5;
+    background-image: url(../images/rock.png);
 
     &.current,
     &:hover {
@@ -113,6 +130,7 @@ a {
 
   &--paper {
     background-color: #FF4A51;
+    background-image: url(../images/paper.png);
 
     &.current,
     &:hover {
@@ -122,6 +140,7 @@ a {
 
   &--scissors {
     background-color: #F7C50C;
+    background-image: url(../images/scissors.png);
 
     &.current,
     &:hover {
