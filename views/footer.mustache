@@ -32,6 +32,7 @@
     });
 
     var channel = pusher.subscribe('presence-game-{{ gameId }}');
+    var selectedType;
 
     channel.bind('pusher:subscription_succeeded', function(data) {
       for(var member in channel.members.members) {
@@ -44,26 +45,25 @@
       }
 
       $('.game__button').click(function() {
-        var selected = $(this).attr('data-move'),
-            type;
+        var selected = $(this).attr('data-move');
 
         $('.game__button.current').removeClass('current');
         $(this).addClass('current');
 
         switch(selected) {
           case 'paper':
-            type = 1;
+            selectedType = 1;
             break;
           case 'scissors':
-            type = 2;
+            selectedType = 2;
             break;
           case 'rock':
-            type = 3;
+            selectedType = 3;
             break;
         }
 
         channel.trigger('client-game-{{ gameId }}-change', {
-          type: type,
+          type: selectedType,
           player_id: channel.members.me.info.name
         });
 
@@ -94,10 +94,10 @@
 
       if (channel.members.me.info.leader) {
         responseCount++;
-        console.log("Resp count " + responseCount);
+
         if(responseCount == expectedResponses) {
           channel.trigger('client-game-{{ gameId }}-game_start', {})
-          startTimer(10, $('#js-timer'));
+          startTimer(5, $('#js-timer'));
           responseCount = 0;
         }
       }
@@ -105,7 +105,7 @@
 
     channel.bind('client-game-{{ gameId }}-game_start', function(data) {
       if (!channel.members.me.info.leader) {
-        startTimer(10, $('#js-timer'));
+        startTimer(5, $('#js-timer'));
       }
     });
 
@@ -149,6 +149,24 @@
       leaderboardRemovePlayer(member.info.name);
     });
 
+    var scoreResponses = 0;
+    var finalScores = [];
+    channel.bind('client-game-{{ gameId }}-scores', function(data) {
+      if (channel.members.me.info.leader) {
+        var expectedResponses = channel.members.count - 1;
+        scoreResponses++;
+        finalScores.push(data);
+        console.log(finalScores);
+        if (scoreResponses == expectedResponses) {
+          finalScores.push({ user_id: channel.members.me.info.name, choice: selectedType });
+          sendScores(finalScores);
+
+          scoreResults = 0;
+          finalScores = [];
+        }
+      }
+    });
+
     var leaderboardAddPlayer = function(memberName) {
       var html = function(name) {
         return '<li data-player-name="' + name + '">' + name + '</li>';
@@ -166,7 +184,7 @@
 
     function startTimer(duration, display) {
       var timer = duration, seconds;
-      setInterval(function() {
+      var tmr = setInterval(function() {
         seconds = parseInt(timer % 60, 10);
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -174,8 +192,31 @@
 
         if (--timer < 0) {
           timer = 0;
+          clearInterval(tmr);
+
+          // game end blah blah HTML stuff
+          if (!channel.members.me.info.leader) {
+            var score = { user_id: channel.members.me.info.name, choice: selectedType }
+            channel.trigger('client-game-{{ gameId }}-scores', score);
+          }
         }
       }, 1000);
+    }
+
+    function sendScores(data) {
+      console.log(data);
+      $.ajax({
+        url: '/game/{{ gameId }}/results',
+        method: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify({ results: data }),
+        success: function(res) {
+          console.log(res);
+        },
+        error: function(err) {
+          console.log(err);
+        }
+      });
     }
 
   </script>
