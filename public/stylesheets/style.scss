@@ -123,7 +123,7 @@ a {
   cursor: pointer;
   border: 6px solid $color-blue;
   box-shadow: none;
-  transition: all 400ms cubic-bezier(.99,.01,.22,.94);
+  transition: all 300ms cubic-bezier(.99,.01,.22,.94);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100%;
@@ -159,6 +159,10 @@ a {
       box-shadow: 0 0 0 12px #9B5CB5;
     }
 
+    &.current { 
+      animation: breatheRock 2000ms ease-in-out infinite alternate;
+    }
+
     .players {
       border-color: #9B5CB5;
       color:  #9B5CB5;
@@ -174,6 +178,10 @@ a {
       box-shadow: 0 0 0 12px #FF4A51;
     }
 
+    &.current {
+      animation: breathePaper 2000ms ease-in-out infinite alternate;
+    }
+
     .players {
       border-color: #FF4A51;
       color: #FF4A51;
@@ -187,6 +195,10 @@ a {
     &.current,
     &:hover {
       box-shadow: 0 0 0 12px #F7C50C;
+    }
+
+    &.current {
+      animation: breatheScissors 2000ms ease-in-out infinite alternate;
     }
 
     .players {
@@ -216,6 +228,32 @@ a {
   }
 }
 
+@keyframes breatheRock {
+  from {
+    box-shadow: 0 0 0 12px #9B5CB5;
+  }
+  to {
+    box-shadow: 0 0 0 4px #9B5CB5;
+  }
+}
+
+@keyframes breathePaper {
+  from {
+    box-shadow: 0 0 0 12px #FF4A51;
+  }
+  to {
+    box-shadow: 0 0 0 4px #FF4A51;
+  }
+}
+
+@keyframes breatheScissors {
+  from {
+    box-shadow: 0 0 0 12px #F7C50C;
+  }
+  to {
+    box-shadow: 0 0 0 4px #F7C50C;
+  }
+}
 .timer {
   @extend %font-family-primary;
   font-size: 40px;
