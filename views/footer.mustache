@@ -34,7 +34,10 @@
     var channel = pusher.subscribe('presence-game-{{ gameId }}');
 
     channel.bind('pusher:subscription_succeeded', function(data) {
-      leaderboardAddPlayer(channel.members.me.info.name);
+      for(var member in channel.members.members) {
+        leaderboardAddPlayer(channel.members.members[member].name);
+      }
+
       if (channel.members.count == 1) {
         $('.game__button').attr('disabled', true);
         $('#waiting-notice').html("Waiting for more players...");
@@ -141,7 +144,14 @@
     });
 
     var leaderboardAddPlayer = function(memberName) {
-      $('.leaderboard__list').append('<li data-player-name="' + memberName + '">' + memberName + '</li>');
+      var html = function(name) {
+        return '<li data-player-name="' + name + '">' + name + '</li>';
+      }
+      if (memberName === channel.members.me.info.name) {
+        $('.leaderboard__list').append(html(memberName + (' (You)')));
+      } else {
+        $('.leaderboard__list').append(html(memberName));
+      }
     }
 
     var leaderboardRemovePlayer = function(memberName) {
