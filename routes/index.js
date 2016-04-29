@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/game/new', function(req, res, next) {
-  var gameId = generateSessionKey(8);
+  var gameId = generateSessionKey(16);
   STORE.set(gameId, {
     players: 1,
     running: false
@@ -40,7 +40,7 @@ router.post('/pusher_auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
   var presenceData = {
-    user_id: generateSessionKey(4),
+    user_id: generateSessionKey(8),
     user_info: {
       name: generateSessionKey(6)
     }

@@ -15,6 +15,10 @@ a {
   color: #00b7ff;
 }
 
+#waiting-notice {
+  color: white;
+}
+
 .leaderboard,
 .game {
   float: left;
@@ -105,7 +109,7 @@ a {
   right: 20px;
   bottom: 20px;
   text-align: center;
-  
+
   &:before,
   &:after {
     font-size: 40px;
@@ -121,13 +125,13 @@ a {
     top: 0;
     text-align: center;
   }
-  
+
   &:before {
     animation: glitch-1 5s infinite linear alternate-reverse;
     right: 44px;
     text-shadow: 1px 0 #40bad8;
   }
-  
+
   &:after {
     animation: glitch-2 3s infinite linear alternate-reverse;
     right: 46px;
