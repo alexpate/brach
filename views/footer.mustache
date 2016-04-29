@@ -77,7 +77,6 @@
         $('.game__button').attr('disabled', false);
 
         if (channel.members.me.info.leader) {
-          // start timer here
           channel.trigger('client-game-{{ gameId }}-game_start_ready', {})
         }
       }

@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/game/new', function(req, res, next) {
-  var gameId = req.body.gameName + "-" + Math.floor((Math.random() * 99));
+  var gameId = req.body.gameName + Math.floor((Math.random() * 99));
   STORE.set(gameId, {
     players: 1,
     running: false
@@ -37,10 +37,20 @@ router.get('/game/:id', function(req, res, next) {
 router.post('/pusher_auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
+  var gameId = channel.split("-")[2];
+  var leader = false;
+
+  var leaderKey = gameId + "-leader";
+  if (!STORE.get(leaderKey)) {
+    STORE.set(leaderKey, true);
+    leader = true;
+  }
+
   var presenceData = {
     user_id: generateSessionKey(8),
     user_info: {
-      name: getPynchonName()
+      name: getPynchonName(),
+      leader: leader
     }
   };
   var auth = pusher.authenticate(socketId, channel, presenceData);
