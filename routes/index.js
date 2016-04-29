@@ -35,14 +35,12 @@ router.get('/game/:id', function(req, res, next) {
 });
 
 router.post('/pusher_auth', function(req, res) {
-  var names = ['bob', 'john'];
-
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
   var presenceData = {
     user_id: generateSessionKey(8),
     user_info: {
-      name: generateSessionKey(6)
+      name: getPynchonName()
     }
   };
   var auth = pusher.authenticate(socketId, channel, presenceData);
@@ -151,5 +149,18 @@ function who_wins(choice1, choice2) {
   return victor;
 }
 
+function getPynchonName() {
+  names = ["Mickey Wolfmann", "Doc Sportello", "Rudy Blatnoyd", "Petunia Leeway", "Scott Oof", "Ensendada Slim", "Jason Velveeta",
+          "Japonica Fenway", "Delwyn Quight", "Sauncho Smilax", "Trillium Fortnight", "Dr. Buddy Tubside", "Flaco the Bad", "Fritz Drybeam",
+          "Sledge Poteet", "Bigfoot Bjornsen", "Tyrone Slothrop", "Yashmeen Halfcourt", "Meatball Mulligan",
+          "Oedipa Maas", "Reverend Wicks Cherrycoke", "Pig Bodine", "Brock Vond", "Driscoll Padgett", "Zepho Bark", "Shasta Fay Hepworth", "Teddy Bloat",
+          "Weed Atman", "Cyprian Latewood", "Melanie L'Heuremaudit", "Mike Fallopian", "Scarsdale Vibe", "Benny Profane", "McClintic Sphere"];
+
+  i = Math.floor((Math.random() * names.length));
+
+  name = names[i];
+
+  return name;
+}
 
 module.exports = router;
