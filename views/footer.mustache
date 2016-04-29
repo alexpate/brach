@@ -140,6 +140,14 @@
     });
 
     channel.bind('pusher:member_removed', function(member) {
+      for(var state in playerStates) {
+        for(var i = 0, l = playerStates[state].length; i < l; i++) {
+          if(playerStates[state][i] == member.info.name) {
+            playerStates[state].splice(i, 1);
+            $('.game__button[data-element=' + state + '] .players ul').empty().html(playerStates[state].join(" ,"));
+          }
+        }
+      }
       leaderboardRemovePlayer(member.info.name);
     });
 
@@ -157,7 +165,6 @@
     var leaderboardRemovePlayer = function(memberName) {
       $('.leaderboard__list li[data-player-name="' + memberName + '"]').remove();
     }
-
 
 
   </script>
