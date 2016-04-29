@@ -1,15 +1,15 @@
 {{> header}}
   {{> leaderboard}}
-  <span class="timer" id="js-timer"></span>
+  <span class="timer" id="js-timer">Start Game</span>
   <main class="game">
-  <div id="waiting-notice"></div>
-    <button data-move="rock" data-element="3" class="game__button game__button--rock">
+  <div id="waiting-notice" class="show">Waiting for more players...</div>
+    <button data-move="rock" data-element="3" class="game__button game__button--rock game__button--disabled" disabled="true">
       <div class="players"></div>
     </button>
-    <button data-move="paper" data-element="1" class="game__button game__button--paper">
+    <button data-move="paper" data-element="1" class="game__button game__button--paper game__button--disabled" disabled="true">
       <div class="players"></div>
     </button>
-    <button data-move="scissors" data-element="2" class="game__button game__button--scissors">
+    <button data-move="scissors" data-element="2" class="game__button game__button--scissors game__button--disabled" disabled="true">
       <div class="players"></div>
     </button>
   </main>

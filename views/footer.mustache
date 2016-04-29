@@ -40,8 +40,8 @@
       }
 
       if (channel.members.count == 1) {
-        $('.game__button').attr('disabled', true).addClass('game__button--disabled');
-        $('#waiting-notice').addClass('show').html("Waiting for more players...");
+        // $('.game__button').attr('disabled', true).addClass('game__button--disabled');
+        // $('#waiting-notice').addClass('show').html("Waiting for more players...");
       }
 
       $('.game__button').click(function() {
@@ -73,13 +73,16 @@
 
     channel.bind('pusher:member_added', function(data) {
       if (channel.members.count > 1) {
-        $('#waiting-notice').removeClass('show');
-        $('.game__button').attr('disabled', false).removeClass('game__button--disabled');
+        $('#js-timer').click(function() {
+          $('#waiting-notice').removeClass('show');
+          $('.game__button').attr('disabled', false).removeClass('game__button--disabled');
+          if (channel.members.me.info.leader) {
+            channel.trigger('client-game-{{ gameId }}-game_start_ready', {})
+          }
+        })
 
-        if (channel.members.me.info.leader) {
-          channel.trigger('client-game-{{ gameId }}-game_start_ready', {})
-        }
       }
+      leaderboardAddPlayer(data.info.name);
     })
 
     channel.bind('client-game-{{ gameId }}-game_start_ready', function(data) {
@@ -97,7 +100,7 @@
 
         if(responseCount == expectedResponses) {
           channel.trigger('client-game-{{ gameId }}-game_start', {})
-          startTimer(5, $('#js-timer'));
+          startTimer(20, $('#js-timer'));
           responseCount = 0;
         }
       }
@@ -105,7 +108,9 @@
 
     channel.bind('client-game-{{ gameId }}-game_start', function(data) {
       if (!channel.members.me.info.leader) {
-        startTimer(5, $('#js-timer'));
+        $('#waiting-notice').removeClass('show');
+          $('.game__button').attr('disabled', false).removeClass('game__button--disabled');
+        startTimer(20, $('#js-timer'));
       }
     });
 
@@ -132,10 +137,6 @@
       playerStates[typeId].push(playerId);
       $('.game__button[data-element=' + typeId + '] .players').empty().html(playerStates[typeId].join(" ,"));
     }
-
-    channel.bind('pusher:member_added', function(member) {
-      leaderboardAddPlayer(member.info.name);
-    });
 
     channel.bind('pusher:member_removed', function(member) {
       for(var state in playerStates) {
@@ -212,12 +213,47 @@
         data: JSON.stringify({ results: data }),
         success: function(res) {
           console.log(res);
+          showFinalResult(res);
         },
         error: function(err) {
           console.log(err);
         }
       });
     }
+
+    function showFinalResult(res) {
+      var max = 0;
+      var winner;
+      for(var player in res) {
+        if (res[player].wins > max) {
+          max = res[player].wins
+          winner = res[player].user_id
+        }
+      }
+
+      channel.trigger('client-game-{{ gameId }}-winner', {
+        winner: winner
+      });
+
+      checkIfIWon(winner);
+      showLeaderboardWinner(winner);
+    }
+
+    function checkIfIWon(winner) {
+      if (channel.members.me.info.name === winner) {
+        $('#waiting-notice').addClass('show').html("YAYYYYYYYY! YOU'RE THE WINNNNNERRRRRR!");
+      } else {
+        $('#waiting-notice').addClass('show').html("SOZ YOU LOST :(");
+      }
+    }
+
+    function showLeaderboardWinner(winner) {
+      $('.leaderboard__list li[data-player-name="' + winner +'"]').addClass('winner-winner-chicken-dinner');
+    }
+
+    channel.bind('client-game-{{ gameId }}-winner', function(data) {
+      checkIfIWon(data.winner);
+    });
 
   </script>
 
